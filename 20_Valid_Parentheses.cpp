@@ -1,17 +1,36 @@
 #include <iostream>
 #include <cstring>
 #include <map>
+#include <stack>
 
 class Solution {
     public:
         bool isValid(std::string str) {
-            for (auto c : str) {}
-            return false;
+            std::stack<char> _stack;
+
+            for (auto c : str) {
+                if (_stack.empty() && (c == ')' || c == '}' || c == ']'))
+                    return false;
+
+                if (c == '(' || c == '{' || c == '[') {
+                    _stack.push(c);
+                } else {
+                    auto top = _stack.top();
+                    if (c == _map[top]) {
+                        _stack.pop();
+                        continue;
+                    }
+                    else
+                        return false;
+                }
+
+            }
+
+            return _stack.empty();
         }
 
     private:
-        std::vector<char> characters = { '(', ')', '{', '}', '[', ']' };
-        std::map<char, char> _map =  { {'(', ')'}, { '{', '}' } };
+        std::map<char, char> _map =  { {'(', ')'}, { '{', '}' }, { '[', ']' } };
 };
 
 int main(int argc, char* argv[]) {
@@ -28,7 +47,8 @@ int main(int argc, char* argv[]) {
     str = "([])";
     std::cout << soln.isValid(str) << std::endl;
 
-    std::cout << true << std::endl;
+    str = "[";
+    std::cout << soln.isValid(str) << std::endl;
 
     return 0;
 }
