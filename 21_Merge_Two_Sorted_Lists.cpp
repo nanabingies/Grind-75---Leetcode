@@ -13,13 +13,12 @@ struct ListNode {
 
 class Solution {
     public:
-        ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-            bool start = true;
+        /*ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
             ListNode* temp_1 = list1;
             ListNode* temp_2 = list2;
 
             ListNode* result = new ListNode();
-            ListNode* back;
+            ListNode* back = nullptr;
             ListNode* temp_result = new ListNode();// result;
 
             do {
@@ -56,17 +55,27 @@ class Solution {
                 if (temp_1->val == -200) {
                     if (temp_2->val == -200) {
                         break;
-                    } else {
+                    }
+                    if (back == nullptr) {
+                        result = temp_2;
+                    } 
+                    else {
                         back->next = temp_2;
                     }
+                    break;
                 }
 
                 if (temp_2->val == -200) {
                     if (temp_1->val == -200) {
                         break;
-                    } else {
+                    } 
+                    if (back == nullptr) {
+                        result = temp_1;
+                    }
+                    else {
                         back->next = temp_1;
                     }
+                    break;
                 }
 
                 if (temp_1->val < temp_2->val) {
@@ -119,10 +128,29 @@ class Solution {
                 return nullptr;
             }
             return result;
-        }
+        }*/
+
+        ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+	        if (!l1 || !l2) return l1 ? l1 : l2;
+		    ListNode head(0);
+		    ListNode* cur = &head;
+		    while (l1 && l2) {
+			    if (l1->val < l2->val) {
+				    cur->next = l1;
+				    l1 = l1->next;
+			    }
+			    else {
+				    cur->next = l2;
+				    l2 = l2->next;
+			    }
+			    cur = cur->next;
+		    }
+		    cur->next = l1 ? l1 : l2;
+		    return head.next;
+	    }
 };
 
-int main(int argc, char* argv[]) {
+/*int main(int argc, char* argv[]) {
     Solution soln;
     std::list<ListNode*> list1, list2;
 
@@ -189,4 +217,4 @@ int main(int argc, char* argv[]) {
     std::putchar('\n');
 
     return 0;
-}
+}*/
