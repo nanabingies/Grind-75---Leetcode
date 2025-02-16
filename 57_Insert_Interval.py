@@ -1,33 +1,27 @@
-class Solution(object):
+class Solution(object):   
     def insert(self, intervals: list, newInterval: list) -> list:
-        """
-        :type intervals: List[List[int]]
-        :type newInterval: List[int]
-        :rtype: List[List[int]]
-        """
-        if len(intervals) == 0:
-            intervals.append(newInterval)
-            return intervals
+        result = []
+        i = 0
+        n = len(intervals)
         
-        index = 0
-        for interval in intervals:
-            if index + 1 >= len(intervals):
-                if newInterval[0] > interval[1]:
-                    intervals.append(newInterval)
-                else:
-                    intervals[index][0] = min(intervals[index][0], newInterval[0])
-                    intervals[index][1] = max(intervals[index][1], newInterval[1])
-                break
-            if newInterval[0] > interval[0] and newInterval[0] < intervals[index+1][0]:
-                intervals[index][1] = newInterval[1]
-                if intervals[index][1] > intervals[index+1][0]:
-                    intervals.pop(index+1)
-                if intervals[index][1] >= intervals[index+1][0]:
-                    intervals[index][1] = intervals[index+1][1]
-                    intervals.pop(index+1)
-                break
-            index += 1
-        return intervals
+        while i < n and intervals[i][1] < newInterval[0]:
+            result.append(intervals[i])
+            i += 1
+            
+        # Merge overlapping intervals
+        while i < n and intervals[i][0] <= newInterval[1]:
+            newInterval[0] = min(newInterval[0], intervals[i][0])
+            newInterval[1] = max(newInterval[1], intervals[i][1])
+            i += 1
+            
+        result.append(newInterval)
+        
+        # Add all remaining intervals after the new interval
+        while i < n:
+            result.append(intervals[i])
+            i += 1
+        
+        return result
     
 if __name__ == "__main__":
     soln = Solution()
